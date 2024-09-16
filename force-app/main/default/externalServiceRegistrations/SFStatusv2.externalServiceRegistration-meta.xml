@@ -49,10 +49,10 @@ definitions:
     properties:
       location:
         type: string
-        example: &quot;Summer &apos;24 Patch 19.7&quot;
+        example: &quot;EMEA&quot;
       environment:
         type: string
-        example: &quot;Summer &apos;24 Patch 19.7&quot;
+        example: &quot;production&quot;
       releaseVersion:
         type: string
         example: &quot;Summer &apos;24 Patch 19.7&quot;
@@ -61,7 +61,20 @@ definitions:
         example: &quot;23.234&quot;
       status:
         type: string
-        enum: [OK, MAJOR_INCIDENT_CORE , MINOR_INCIDENT_CORE, MAINTENANCE_CORE, MAJOR_INCIDENT_NONCORE, MINOR_INCIDENT_NONCORE, MAINTENANCE_NONCORE]</schema>
+        enum: [OK, MAJOR_INCIDENT_CORE , MINOR_INCIDENT_CORE, MAINTENANCE_CORE, MAJOR_INCIDENT_NONCORE, MINOR_INCIDENT_NONCORE, MAINTENANCE_NONCORE]    
+      Maintenances:
+        type: array
+        items:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            plannedStartTime:
+              type: string</schema>
     <schemaType>OpenApi</schemaType>
     <serviceBinding>{&quot;host&quot;:null,&quot;basePath&quot;:&quot;/v1&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{}}</serviceBinding>
     <status>Complete</status>
