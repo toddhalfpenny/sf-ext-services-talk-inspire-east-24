@@ -1,0 +1,55 @@
+swagger: '2.0'
+info:
+  version: '2.0'
+  title: status.salesforce.com
+  description: 'status.salesforce.com'
+  x-vcap-service-name: status.salesforce.com
+basePath: /v1
+securityDefinitions:
+  basicAuth:
+    type: basic
+security:
+  - basicAuth: []
+tags:
+  - name: status.salesforce.com
+paths:
+  /instances/{key}/status:
+    get:
+      operationId: getStatus
+      summary: Retrieves the status
+      description: Retrieves the status for the API user
+      consumes:
+        - text/plain
+      produces:
+        - application/json
+      parameters:
+        - name: key
+          in: path
+          required: true
+          type: string
+          description: Instance key
+      responses:
+        '200':
+          description: The response when system finds a match
+          schema:
+            $ref: '#/definitions/status'
+definitions:
+  status:
+    required:
+      - releaseVersion
+    properties:
+      location:
+        type: string
+        example: "EMEA"
+      environment:
+        type: string
+        example: "production"
+      releaseVersion:
+        type: string
+        example: "Summer '24 Patch 19.7"
+      releaseNumber:
+        type: string
+        example: "23.234"
+      status:
+        type: string
+        enum: [OK, MAJOR_INCIDENT_CORE , MINOR_INCIDENT_CORE, MAINTENANCE_CORE, MAJOR_INCIDENT_NONCORE, MINOR_INCIDENT_NONCORE, MAINTENANCE_NONCORE]

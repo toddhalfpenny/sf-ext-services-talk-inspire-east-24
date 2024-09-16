@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>CurrApiv2</label>
+    <namedCredentialReference>CurrencyAPINamedCredLegacy</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>getlatest</name>
+    </operations>
+    <operations>
+        <active>true</active>
+        <name>getstatus</name>
+    </operations>
+    <registrationProviderType>Custom</registrationProviderType>
+    <schema>swagger: &apos;2.0&apos;
+info:
+  version: &apos;1.0&apos;
+  title: currencyapi.com
+  description: &apos;CurrencyAPI.com Swagger &apos;
+  x-vcap-service-name: currencyapi.com
+securityDefinitions:
+  basicAuth:
+    type: basic
+security:
+  - basicAuth: []
+tags:
+  - name: currencyapi.com
+paths:
+  /v3/status:
+    get:
+      operationId: getStatus
+      summary: Retrieves the status
+      description: Retrieves the status for the API user
+      consumes:
+        - text/plain
+      produces:
+        - application/json
+      parameters:
+        - name: apikey
+          in: header
+          required: true
+          type: string
+          description: API key
+      responses:
+        &apos;200&apos;:
+          description: The response when system finds an account with given name
+          schema:
+            $ref: &apos;#/definitions/status&apos;
+  /v3/latest:
+    get:
+      operationId: getLatest
+      summary: Retrieves the latest conversion rates
+      description: Retrieves the latest conversion rates
+      consumes:
+        - text/plain
+      produces:
+        - application/json
+      parameters:
+        - name: apikey
+          in: header
+          required: true
+          type: string
+          description: API key
+        - name: base_currency
+          in: query
+          required: true
+          type: string
+          description: Base Currency
+        - name: currencies
+          in: query
+          required: true
+          type: string
+          description: Currencies to get
+      responses:
+        &apos;200&apos;:
+          description: The response when system finds an account with given name
+          schema:
+            $ref: &apos;#/definitions/latest&apos;
+definitions:
+  latest:
+    required:
+      - meta
+      - data
+    properties:
+      meta:
+        type: object
+        description: metadata
+        required:
+          - last_updated_at
+        properties:
+          last_updated_at:
+            type: string
+            example: &quot;2023-06-23T10:15:59Z&quot;
+      data:
+        type: object
+        example : {
+          &quot;CAD&quot;: {
+            &quot;code&quot;: &quot;CAD&quot;,
+            &quot;value&quot;: 3.67306
+          },
+          &quot;GPB&quot;: {
+              &quot;code&quot;: &quot;GPB&quot;,
+              &quot;value&quot;: 91.80254
+          },
+          &quot;USD&quot;: {
+              &quot;code&quot;: &quot;USD&quot;,
+              &quot;value&quot;: 108.22904
+          }
+        }
+        properties:
+          CAD: 
+            $ref: &apos;#/definitions/currency_result&apos;
+          GBP: 
+            $ref: &apos;#/definitions/currency_result&apos;
+          USD: 
+            $ref: &apos;#/definitions/currency_result&apos;
+  status:
+    required:
+      - quotas
+    properties:
+      quotas:
+        type: object
+        description: quotas
+        required:
+          - month
+        properties:
+          month:
+            type: object
+            required:
+              - total
+              - used
+              - remaining
+            properties:
+              total:
+                type: number
+              used:
+                type: number
+              remaining:
+                type: number
+  currency_result:
+    properties:
+      code:
+        type: string
+        example: &quot;USD&quot;
+      value: 
+        type: number
+        example: 3.1234
+</schema>
+    <schemaType>OpenApi</schemaType>
+    <status>Complete</status>
+    <systemVersion>5</systemVersion>
+</ExternalServiceRegistration>

@@ -1,0 +1,112 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0",
+        "title": "currencyapi.com",
+        "description": "CurrencyAPI.com Swagger ",
+        "x-vcap-service-name": "currencyapi.com"
+    },
+    "securityDefinitions": {
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "currencyapi.com"
+        }
+    ],
+    "paths": {
+        "/v3/status": {
+            "get": {
+                "operationId": "getStatus",
+                "summary": "Retrieves the status",
+                "description": "Retrieves the status for the API user",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "apikey",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "description": "API key"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The response when system finds an account with given name",
+                        "schema": {
+                            "$ref": "#/definitions/status"
+                        }
+                    },
+                    "400": {
+                        "description": "Error response if the account name parameter is less than minimum characters",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "Error response if the account is not supported by service or account is not found",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }          
+        }
+    },
+    "definitions": {
+        "status": {
+            "required": [
+                "id",
+                "name",
+                "type",
+                "availableBal"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "id"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "name"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "type"
+                },
+                "availableBal": {
+                    "type": "string",
+                    "description": "availableBal"
+                }
+            }
+        },
+        "errorModel": {
+            "required": [
+                "errorCode",
+                "errorMessage"
+            ],
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "description": "A service-specific error code."
+                },
+                "errorMessage": {
+                    "type": "string",
+                    "description": "A service-specific error code."
+                }
+            }
+        }
+    }
+}
