@@ -14,19 +14,19 @@
         <inputParameters>
             <name>apikey</name>
             <value>
-                <elementReference>CurrApiKey</elementReference>
+                <elementReference>APIKey</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
             <name>base_currency</name>
             <value>
-                <stringValue>USD</stringValue>
+                <elementReference>BaseCurrency</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
             <name>currencies</name>
             <value>
-                <stringValue>CAD,GBP</stringValue>
+                <elementReference>CurrenciesToRetrieve</elementReference>
             </value>
         </inputParameters>
         <nameSegment>CurrApiv2.getLatest</nameSegment>
@@ -44,14 +44,22 @@
             <numberValue>1.0</numberValue>
         </value>
     </constants>
-    <constants>
-        <name>CurrApiKey</name>
-        <dataType>String</dataType>
-        <value>
-            <stringValue>cur_live_1PW6bi7sqgRo9QclyeHGdjN8Tkj11rvk3mG1QVFF</stringValue>
-        </value>
-    </constants>
     <environments>Default</environments>
+    <formulas>
+        <name>APIKey</name>
+        <dataType>String</dataType>
+        <expression>{!$CustomMetadata.CurrencyAPISettings__mdt.Master.API_Key__c}</expression>
+    </formulas>
+    <formulas>
+        <name>BaseCurrency</name>
+        <dataType>String</dataType>
+        <expression>{!$CustomMetadata.CurrencyAPISettings__mdt.Master.Base_Currency__c}</expression>
+    </formulas>
+    <formulas>
+        <name>CurrenciesToRetrieve</name>
+        <dataType>String</dataType>
+        <expression>{!$CustomMetadata.CurrencyAPISettings__mdt.Master.Currencies__c}</expression>
+    </formulas>
     <interviewLabel>ThTest1 {!$Flow.CurrentDateTime}</interviewLabel>
     <label>ThTest1</label>
     <processMetadataValues>
@@ -83,7 +91,7 @@
         <allowPause>true</allowPause>
         <fields>
             <name>LatestAPIResults</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Latest Conversion Rates&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Updated at : {!CurrAPILatest.meta.lastx5fupdatedx5fat}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;CAD: {!CurrAPILatest.data.CAD.value}&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;GBP: {!CurrAPILatest.data.GBP.value}&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Latest Conversion Rates&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Updated at : {!CurrAPILatest.meta.lastx5fupdatedx5fat}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;CAD: {!CurrAPILatest.data.CAD.value}&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot;&gt;GBP: {!CurrAPILatest.data.GBP.value}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot;&gt;USD: {!CurrAPILatest.data.USD.value}&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
@@ -96,7 +104,7 @@
             <targetReference>Get_Curr_API_Latest</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>account</name>
         <apexClass>ExternalService__BankService_accountDetails</apexClass>

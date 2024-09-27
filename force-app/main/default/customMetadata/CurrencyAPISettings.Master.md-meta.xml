@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Master</label>
+    <protected>false</protected>
+    <values>
+        <field>API_Key__c</field>
+        <value xsi:type="xsd:string">cur_live_1PW6bi7sqgRo9QclyeHGdjN8Tkj11rvk3mG1QVFF</value>
+    </values>
+    <values>
+        <field>Base_Currency__c</field>
+        <value xsi:type="xsd:string">USD</value>
+    </values>
+    <values>
+        <field>Currencies__c</field>
+        <value xsi:type="xsd:string">CAD,GBP,USD</value>
+    </values>
+</CustomMetadata>
