@@ -3,18 +3,18 @@
     <actionCalls>
         <name>Get_Curr_API_Latest</name>
         <label>Get Curr API Latest</label>
-        <locationX>176</locationX>
+        <locationX>182</locationX>
         <locationY>134</locationY>
         <actionName>CurrApiv2.getLatest</actionName>
         <actionType>externalService</actionType>
         <connector>
-            <targetReference>Update_Latest_Rates</targetReference>
+            <targetReference>OK_Response</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>apikey</name>
             <value>
-                <elementReference>APIKey</elementReference>
+                <elementReference>OkStatusCode</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -34,13 +34,17 @@
             <assignToReference>CurrAPILatest</assignToReference>
             <name>200</name>
         </outputParameters>
+        <outputParameters>
+            <assignToReference>ApiResponseCode</assignToReference>
+            <name>responseCode</name>
+        </outputParameters>
         <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
-        <name>UpdateScreen</name>
-        <label>UpdateScreen</label>
-        <locationX>176</locationX>
-        <locationY>350</locationY>
+        <name>UpdateScreen_Action_1</name>
+        <label>UpdateScreen Action 1</label>
+        <locationX>314</locationX>
+        <locationY>458</locationY>
         <actionName>c:UpdateScreen</actionName>
         <actionType>component</actionType>
         <connector>
@@ -53,12 +57,37 @@
     </actionCalls>
     <apiVersion>61.0</apiVersion>
     <constants>
-        <name>AccId</name>
+        <name>OkStatusCode</name>
         <dataType>Number</dataType>
         <value>
-            <numberValue>1.0</numberValue>
+            <numberValue>200.0</numberValue>
         </value>
     </constants>
+    <decisions>
+        <name>OK_Response</name>
+        <label>OK Response?</label>
+        <locationX>182</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>Update_Latest_Rates</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Error</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ApiResponseCode</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>OkStatusCode</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Error_screen</targetReference>
+            </connector>
+            <label>Error</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
     <formulas>
         <name>APIKey</name>
@@ -104,10 +133,10 @@
     <recordUpdates>
         <name>Update_Latest_Rates</name>
         <label>Update Latest Rates</label>
-        <locationX>176</locationX>
-        <locationY>242</locationY>
+        <locationX>314</locationX>
+        <locationY>350</locationY>
         <connector>
-            <targetReference>UpdateScreen</targetReference>
+            <targetReference>UpdateScreen_Action_1</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -132,10 +161,26 @@
         <object>Opportunity</object>
     </recordUpdates>
     <screens>
+        <name>Error_screen</name>
+        <label>Error screen</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>ErrorMsg</name>
+            <fieldText>&lt;p&gt;Sorry, we were unable to load the latest rates at this time&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
         <name>Screen1</name>
         <label>Screen1</label>
-        <locationX>176</locationX>
-        <locationY>458</locationY>
+        <locationX>314</locationX>
+        <locationY>566</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -165,13 +210,21 @@
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>50</locationX>
+        <locationX>56</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Curr_API_Latest</targetReference>
         </connector>
     </start>
     <status>Draft</status>
+    <variables>
+        <name>ApiResponseCode</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
     <variables>
         <name>CurApiString</name>
         <dataType>String</dataType>
@@ -186,13 +239,6 @@
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <name>Date</name>
-        <dataType>Date</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>LastAPIDate</name>

@@ -75,6 +75,8 @@ paths:
           description: The response when system finds an account with given name
           schema:
             $ref: &apos;#/definitions/latest&apos;
+        &apos;401&apos;:
+          description: Invalid authentication credentials
 definitions:
   latest:
     required:
