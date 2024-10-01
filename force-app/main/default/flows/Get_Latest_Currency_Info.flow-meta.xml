@@ -8,7 +8,7 @@
         <actionName>CurrApiv2.getLatest</actionName>
         <actionType>externalService</actionType>
         <connector>
-            <targetReference>ResToStr</targetReference>
+            <targetReference>Update_Latest_Rates</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -20,7 +20,7 @@
         <inputParameters>
             <name>base_currency</name>
             <value>
-                <elementReference>Opportunity.CurrencyIsoCode</elementReference>
+                <elementReference>recordId.CurrencyIsoCode</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -36,37 +36,22 @@
         </outputParameters>
         <versionSegment>1</versionSegment>
     </actionCalls>
-    <apiVersion>61.0</apiVersion>
-    <assignments>
-        <name>ResToStr</name>
-        <label>ResToStr</label>
+    <actionCalls>
+        <name>UpdateScreen</name>
+        <label>UpdateScreen</label>
         <locationX>176</locationX>
-        <locationY>242</locationY>
-        <assignmentItems>
-            <assignToReference>CurApiString</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>CurrAPILatest.data.CAD.value</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>CurApiString</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>CurrAPILatest.data.GBP.value</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>CurApiString</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>CurrAPILatest.data.USD.value</elementReference>
-            </value>
-        </assignmentItems>
+        <locationY>350</locationY>
+        <actionName>c:UpdateScreen</actionName>
+        <actionType>component</actionType>
         <connector>
             <targetReference>Screen1</targetReference>
         </connector>
-    </assignments>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <nameSegment>c:UpdateScreen</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>61.0</apiVersion>
     <constants>
         <name>AccId</name>
         <dataType>Number</dataType>
@@ -84,6 +69,16 @@
         <name>BaseCurrency</name>
         <dataType>String</dataType>
         <expression>{!$CustomMetadata.CurrencyAPISettings__mdt.Master.Base_Currency__c}</expression>
+    </formulas>
+    <formulas>
+        <name>DateTimeStr</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE(SUBSTITUTE({!CurrAPILatest.meta.lastx5fupdatedx5fat}, &quot;T&quot;, &quot; &quot;), &quot;Z&quot;, &quot;&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>LatestDateStrToDate</name>
+        <dataType>DateTime</dataType>
+        <expression>DATETIMEVALUE({!DateTimeStr})</expression>
     </formulas>
     <interviewLabel>Get Latest Currency Info {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Get Latest Currency Info</label>
@@ -106,14 +101,44 @@
         </value>
     </processMetadataValues>
     <processType>Flow</processType>
+    <recordUpdates>
+        <name>Update_Latest_Rates</name>
+        <label>Update Latest Rates</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <connector>
+            <targetReference>UpdateScreen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>USD_Rate_Date_latest__c</field>
+            <value>
+                <elementReference>LatestDateStrToDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>USD_Rate_Latest__c</field>
+            <value>
+                <elementReference>CurrAPILatest.data.USD.value</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
     <screens>
         <name>Screen1</name>
         <label>Screen1</label>
         <locationX>176</locationX>
-        <locationY>350</locationY>
-        <allowBack>true</allowBack>
+        <locationY>458</locationY>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <fields>
             <name>Screen1_Section1</name>
             <fieldType>RegionContainer</fieldType>
@@ -122,7 +147,7 @@
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>LatestAPIResults</name>
-                    <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 10px; color: rgb(121, 108, 108);&quot;&gt;﻿        &lt;/span&gt;&lt;span style=&quot;font-size: 11px; color: rgb(121, 108, 108);&quot;&gt;Latest {!BaseCurrency} Rate&lt;/span&gt;&lt;span style=&quot;color: rgb(121, 108, 108);&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color: rgb(85, 85, 85); font-size: 10px; background-color: rgb(255, 255, 255);&quot;&gt;(As of {!CurrAPILatest.meta.lastx5fupdatedx5fat})&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot;&gt;        {!CurApiString}&lt;/span&gt;&lt;/p&gt;</fieldText>
+                    <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 10px; color: rgb(121, 108, 108);&quot;&gt;﻿        &lt;/span&gt;&lt;span style=&quot;font-size: 11px; color: rgb(121, 108, 108);&quot;&gt;Latest {!BaseCurrency} Rate&lt;/span&gt;&lt;span style=&quot;color: rgb(121, 108, 108);&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color: rgb(85, 85, 85); background-color: rgb(255, 255, 255); font-size: 10px;&quot;&gt;(As of {{!CurrAPILatest.meta.lastx5fupdatedx5fat}})&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;        {!CurrAPILatest.data.USD.value}&lt;/span&gt;&lt;/p&gt;</fieldText>
                     <fieldType>DisplayText</fieldType>
                 </fields>
                 <inputParameters>
@@ -136,8 +161,8 @@
             <isRequired>false</isRequired>
             <regionContainerType>SectionWithoutHeader</regionContainerType>
         </fields>
-        <showFooter>false</showFooter>
-        <showHeader>false</showHeader>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
     </screens>
     <start>
         <locationX>50</locationX>
@@ -146,7 +171,7 @@
             <targetReference>Get_Curr_API_Latest</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <name>CurApiString</name>
         <dataType>String</dataType>
@@ -163,7 +188,21 @@
         <isOutput>true</isOutput>
     </variables>
     <variables>
-        <name>Opportunity</name>
+        <name>Date</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>LastAPIDate</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>recordId</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
